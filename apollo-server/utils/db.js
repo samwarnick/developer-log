@@ -12,5 +12,6 @@ export const db = new Lowdb(
 // Seed an empty DB
 db.defaults({
   messages: [],
-  uploads: []
+  uploads: [],
+  users: []
 }).write();
