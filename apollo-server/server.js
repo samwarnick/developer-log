@@ -3,7 +3,6 @@ import express from "express";
 import passport from "passport";
 import GitHubStrategy from "passport-github";
 import { db } from "./utils/db";
-import shortid from "shortid";
 import jwt from "jsonwebtoken";
 
 passport.serializeUser((user, done) => {
@@ -11,13 +10,12 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  console.log({ id });
-  const user = db
-    .get("users")
-    .find({ id })
-    .last()
-    .write();
-  done(null, user);
+  const result = await db.query("SELECT * FROM users WHERE id = $1;", [id]);
+  if (result.rows.length === 1) {
+    done(null, result.rows[0]);
+  } else {
+    done("Couldn't find user");
+  }
 });
 
 passport.use(
@@ -28,32 +26,29 @@ passport.use(
       callbackURL: "/auth/github/return"
     },
     async (accessToken, refreshToken, profile, done) => {
-      const user = await db
-        .get("users")
-        .find({ github_id: profile.id })
-        .value();
-      if (user) {
-        done(null, user);
+      const result = await db.query(
+        "SELECT * FROM users WHERE github_id = $1;",
+        [profile.id]
+      );
+      let user;
+      if (result.rows.length === 1) {
+        user = result.rows[0];
       } else {
-        const user = {
-          id: shortid.generate(),
-          github_id: profile.id,
-          display_name: profile.displayName,
-          profile_image: profile._json.avatar_url
-        };
-        db.get("users")
-          .push(user)
-          .last()
-          .write();
-        done(null, user);
+        const result = await db.query(
+          "INSERT INTO users(github_id, display_name, profile_image) VALUES($1, $2, $3) RETURNING *;",
+          [profile.id, profile.displayName, profile._json.avatar_url]
+        );
+        user = result.rows[0];
       }
+      done(null, user);
     }
   )
 );
 
 export default app => {
-  app.use("/files", express.static(path.resolve(__dirname, "../live/uploads")));
   app.use(passport.initialize());
+
+  app.use("/", express.static(path.resolve(__dirname, "../dist")));
 
   app.get("/auth/github", passport.authenticate("github"));
 

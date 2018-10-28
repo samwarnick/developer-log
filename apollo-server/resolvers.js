@@ -1,70 +1,66 @@
 import GraphQLJSON from "graphql-type-json";
-import shortid from "shortid";
+import { ForbiddenError } from "apollo-server";
+import moment from "moment";
+import _ from "lodash";
 
 export default {
   JSON: GraphQLJSON,
 
-  Counter: {
-    countStr: counter => `Current count: ${counter.count}`
-  },
-
   Query: {
-    hello: (root, { name }) => `Hello ${name || "World"}!`,
-    messages: (root, args, { db }) => db.get("messages").value(),
-    uploads: (root, args, { db }) => db.get("uploads").value()
+    logEntries: async (root, args, { user, db }) => {
+      if (!user) {
+        throw new ForbiddenError("You must be logged in.");
+      }
+      const result = await db.query(
+        "SELECT * FROM log_entries WHERE user_id = $1",
+        [user.id]
+      );
+
+      const groupedEntries = _(result.rows)
+        .sortBy(entry => new moment(entry.created))
+        .reverse()
+        .groupBy(entry => new moment(entry.created).format("D MMM YYYY"))
+        .value();
+
+      const dates = _.keys(groupedEntries);
+
+      const groups = dates.map(date => {
+        return {
+          day: date,
+          logEntries: groupedEntries[date]
+        };
+      });
+
+      return _(groups)
+        .sortBy(group => new moment(group.day))
+        .reverse()
+        .value();
+    }
   },
 
   Mutation: {
-    myMutation: (root, args, context) => {
-      const message = "My mutation completed!";
-      context.pubsub.publish("hey", { mySub: message });
-      return message;
-    },
-    addMessage: (root, { input }, { pubsub, db }) => {
-      const message = {
-        id: shortid.generate(),
-        text: input.text
-      };
-
-      db.get("messages")
-        .push(message)
-        .last()
-        .write();
-
-      pubsub.publish("messages", { messageAdded: message });
-
-      return message;
-    },
-
-    singleUpload: (root, { file }, { processUpload }) => processUpload(file),
-    multipleUpload: (root, { files }, { processUpload }) =>
-      Promise.all(files.map(processUpload))
-  },
-
-  Subscription: {
-    mySub: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator("hey")
-    },
-    counter: {
-      subscribe: (parent, args, { pubsub }) => {
-        const channel = Math.random()
-          .toString(36)
-          .substring(2, 15); // random channel name
-        let count = 0;
-        setInterval(
-          () =>
-            pubsub.publish(channel, {
-              // eslint-disable-next-line no-plusplus
-              counter: { count: count++ }
-            }),
-          2000
-        );
-        return pubsub.asyncIterator(channel);
+    addLogEntry: async (root, { input }, { user, db }) => {
+      if (!user) {
+        throw new ForbiddenError("You must be logged in.");
       }
-    },
 
-    messageAdded: {
-      subscribe: (parent, args, { pubsub }) => pubsub.asyncIterator("messages")
+      const result = await db.query(
+        "INSERT INTO log_entries(user_id, content) VALUES($1, $2) RETURNING *",
+        [user.id, input.content]
+      );
+
+      return result.rows[0];
+    },
+    deleteLogEntry: async (root, { input }, { user, db }) => {
+      if (!user) {
+        throw new ForbiddenError("You must be logged in.");
+      }
+      await db.query("DELETE FROM log_entries WHERE id = $1 AND user_id = $2", [
+        input.id,
+        user.id
+      ]);
+
+      return true;
     }
   }
 };

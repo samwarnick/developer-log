@@ -1,0 +1,5 @@
+fragment LogEntry on LogEntry {
+  id
+  content
+  created
+}

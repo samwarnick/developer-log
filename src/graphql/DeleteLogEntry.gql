@@ -1,0 +1,4 @@
+
+mutation deleteLogEntry ($input: DeleteLogEntryInput!) {
+  deleteLogEntry (input: $input)
+}

@@ -1,17 +1,13 @@
-import Lowdb from "lowdb";
-import FileSync from "lowdb/adapters/FileSync";
-import mkdirp from "mkdirp";
-import { resolve } from "path";
+import { Client } from "pg";
+import dotenv from "dotenv";
 
-mkdirp(resolve(__dirname, "../../live"));
+dotenv.config();
 
-export const db = new Lowdb(
-  new FileSync(resolve(__dirname, "../../live/db.json"))
-);
-
-// Seed an empty DB
-db.defaults({
-  messages: [],
-  uploads: [],
-  users: []
-}).write();
+export const db = new Client({
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD,
+  port: process.env.PGPORT
+});
+db.connect();

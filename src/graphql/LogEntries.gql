@@ -1,0 +1,10 @@
+#import "./LogEntryFragment.gql"
+
+query logEntries {
+  logEntries {
+    day
+    logEntries {
+      ...LogEntry
+    }
+  }
+}

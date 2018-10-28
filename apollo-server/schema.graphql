@@ -1,60 +1,31 @@
 # Included scalars
 scalar JSON
-scalar Upload
 
-# It will increment!
-type Counter {
-  # Number of increments
-  count: Int!
-  # Full message for testing
-  countStr: String
+type LogEntryGroup {
+  day: String!
+  logEntries: [LogEntry]!
 }
 
-# A text message send by users
-type Message {
+type LogEntry {
   id: ID!
-  # Message content
-  text: String!
+  content: String!
+  created: String!
 }
 
-# Input from user to create a message
-input MessageInput {
-  # Message content
-  text: String!
+input LogEntryInput {
+  content: String!
 }
 
-type File {
+input DeleteLogEntryInput {
   id: ID!
-  path: String!
-  filename: String!
-  mimetype: String!
-  encoding: String!
 }
 
 
 type Query {
-  # Test query with a parameter
-  hello(name: String): String!
-  # List of messages sent by users
-  messages: [Message]
-  uploads: [File]
-
+  logEntries: [LogEntryGroup]
 }
 
 type Mutation {
-  myMutation: String!
-  # Add a message and publish it on 'messages' subscription channel
-  addMessage (input: MessageInput!): Message!
-  singleUpload (file: Upload!): File!
-  multipleUpload (files: [Upload!]!): [File!]!
-
-}
-
-type Subscription {
-  mySub: String!
-  # This will update every 2 seconds
-  counter: Counter!
-  # When a new message is added
-  messageAdded: Message!
-
+  addLogEntry (input: LogEntryInput!): LogEntry!
+  deleteLogEntry (input: DeleteLogEntryInput!): Boolean!
 }

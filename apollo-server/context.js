@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 // req => Query
 // connection => Subscription
 // eslint-disable-next-line no-unused-vars
-export default ({ req, connection }) => {
+export default async ({ req, connection }) => {
   let token;
   // HTTP
   if (req) token = req.get("Authorization");
@@ -15,10 +15,10 @@ export default ({ req, connection }) => {
   let user = {};
   if (token) {
     const data = jwt.verify(token, process.env.JWT_SECRET);
-    user = db
-      .get("users")
-      .find({ id: data.id })
-      .value();
+    const result = await db.query("SELECT * FROM users WHERE id = $1;", [
+      data.id
+    ]);
+    user = result.rows[0];
   }
 
   return {
