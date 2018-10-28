@@ -3,6 +3,8 @@ import { ForbiddenError } from "apollo-server";
 import moment from "moment";
 import _ from "lodash";
 
+const DATE_FORMAT = "D MMM YYYY";
+
 export default {
   JSON: GraphQLJSON,
 
@@ -17,9 +19,15 @@ export default {
       );
 
       const groupedEntries = _(result.rows)
+        .map(entry => {
+          return {
+            ...entry,
+            created: entry.created.toISOString()
+          };
+        })
         .sortBy(entry => new moment(entry.created))
         .reverse()
-        .groupBy(entry => new moment(entry.created).format("D MMM YYYY"))
+        .groupBy(entry => new moment(entry.created).format(DATE_FORMAT))
         .value();
 
       const dates = _.keys(groupedEntries);
@@ -32,7 +40,7 @@ export default {
       });
 
       return _(groups)
-        .sortBy(group => new moment(group.day))
+        .sortBy(group => new moment(group.day, DATE_FORMAT))
         .reverse()
         .value();
     }
