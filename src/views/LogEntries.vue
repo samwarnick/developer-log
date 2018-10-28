@@ -75,6 +75,7 @@ export default {
       return marked(value, { sanitize: true });
     },
     dateIsToday(date) {
+      date = new moment(date, "D MMM YYYY");
       return moment().diff(date, "days") === 0;
     },
     addLogEntry() {
@@ -94,7 +95,7 @@ export default {
           // Add our tag from the mutation to the end
           if (!this.dateIsToday(data.logEntries[0].day)) {
             data.logEntries.unshift({
-              day: new moment().format("MMM D YYYY"),
+              day: new moment().format("D MMM YYYY"),
               logEntries: []
             });
           }
