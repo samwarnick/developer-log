@@ -67,7 +67,7 @@ export default app => {
         expiresIn: "1d"
       });
       res.cookie("apollo-token", token);
-      res.redirect("http://localhost:8080");
+      res.redirect("http://localhost:8080/log");
     }
   );
 };

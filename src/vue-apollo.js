@@ -4,12 +4,10 @@ import {
   createApolloClient,
   restartWebsockets
 } from "vue-cli-plugin-apollo/graphql-client";
+import { AUTH_TOKEN, getCookieByName } from "./utils/auth";
 
 // Install the vue plugin
 Vue.use(VueApollo);
-
-// Name of the localStorage item
-const AUTH_TOKEN = "apollo-token";
 
 // Http endpoint
 const httpEndpoint =
@@ -47,20 +45,7 @@ const defaultOptions = {
   // cache: myCache
 
   // Override the way the Authorization header is set
-  getAuth: tokenName => {
-    return (
-      decodeURIComponent(
-        document.cookie.replace(
-          new RegExp(
-            "(?:(?:^|.*;)\\s*" +
-              encodeURIComponent(tokenName).replace(/[-.+*]/g, "\\$&") +
-              "\\s*\\=\\s*([^;]*).*$)|^.*$"
-          ),
-          "$1"
-        )
-      ) || null
-    );
-  }
+  getAuth: tokenName => getCookieByName(tokenName)
 
   // Additional ApolloClient options
   // apollo: { ... }
