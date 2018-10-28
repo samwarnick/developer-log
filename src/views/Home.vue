@@ -7,12 +7,8 @@
 
 <script>
 // @ is an alias to /src
-import ApolloExample from "@/components/ApolloExample.vue";
 
 export default {
-  name: "home",
-  components: {
-    ApolloExample
-  }
+  name: "home"
 };
 </script>
