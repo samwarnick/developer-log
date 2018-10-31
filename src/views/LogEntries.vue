@@ -1,6 +1,5 @@
 <template>
   <div class="log-entries">
-    <h1 class="m-10">Developer Log</h1>
     <div class="w-full mb-4 p-4 border-b">
       <form class="flex" @submit.prevent="addLogEntry">
         <textarea

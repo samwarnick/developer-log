@@ -1,12 +1,21 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>|
-      <router-link to="/log">Log</router-link>
-    </div>
+    <SiteNavigation/>
     <router-view/>
   </div>
 </template>
+
+<script>
+import SiteNavigation from "@/components/SiteNavigation.vue";
+
+export default {
+  name: "App",
+  components: {
+    SiteNavigation
+  }
+};
+</script>
+
 
 <style lang="scss">
 </style>

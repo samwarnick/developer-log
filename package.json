@@ -13,9 +13,11 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.7",
+    "@fortawesome/free-brands-svg-icons": "^5.4.2",
     "@fortawesome/free-solid-svg-icons": "^5.4.2",
     "@fortawesome/vue-fontawesome": "^0.1.1",
     "apollo-server": "^2.1.0",
+    "dotenv": "^6.1.0",
     "graphql-type-json": "^0.2.1",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.11",
@@ -26,7 +28,8 @@
     "vue": "^2.5.17",
     "vue-apollo": "^3.0.0-beta.11",
     "vue-moment": "^4.0.0",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^3.0.0",

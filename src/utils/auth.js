@@ -1,3 +1,6 @@
+import router from "@/router";
+import store from "@/store";
+
 export const AUTH_TOKEN = "apollo-token";
 
 export function getCookieByName(name) {
@@ -19,11 +22,16 @@ export function isLoggedIn() {
   return !!getCookieByName(AUTH_TOKEN);
 }
 
+export function didLogin() {
+  store.dispatch("login");
+}
+
 export function logout() {
   if (isLoggedIn()) {
     document.cookie =
       encodeURIComponent(AUTH_TOKEN) +
       "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-    // redirect to home
+    router.push("/");
+    store.dispatch("logout");
   }
 }
