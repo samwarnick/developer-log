@@ -2,7 +2,7 @@
   <div class="log-entries">
     <h1 class="m-10">Developer Log</h1>
     <div class="w-full mb-4 p-4 border-b">
-      <form class="flex">
+      <form class="flex" @submit.prevent="addLogEntry">
         <textarea
           v-model="entry"
           type="text"
@@ -13,7 +13,6 @@
         <button
           type="submit"
           class="border-2 border-blue bg-white hover:bg-blue text-blue hover:text-white rounded px-2 ml-2 flex items-center justify-center focus:outline-none shadow"
-          @click="addLogEntry"
         >
           <FontAwesomeIcon icon="plus"/>
         </button>
@@ -82,6 +81,7 @@ export default {
       const newLogEntry = {
         content: this.entry
       };
+      const created = new Date().toISOString();
       this.entry = "";
 
       this.$apollo.mutate({
@@ -111,6 +111,7 @@ export default {
           addLogEntry: {
             __typename: "LogEntry",
             id: -1,
+            created,
             ...newLogEntry
           }
         }
@@ -122,7 +123,7 @@ export default {
         variables: {
           input: { id }
         },
-        update: (store, { data: { newTag } }) => {
+        update: store => {
           const data = store.readQuery({ query: logEntriesGql });
 
           data.logEntries = data.logEntries.filter(group => {
