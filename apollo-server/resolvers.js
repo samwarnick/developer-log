@@ -57,7 +57,10 @@ export default {
         [user.id, input.content]
       );
 
-      return result.rows[0];
+      return {
+        ...result.rows[0],
+        created: result.rows[0].created.toISOString()
+      };
     },
     deleteLogEntry: async (root, { input }, { user, db }) => {
       if (!user) {

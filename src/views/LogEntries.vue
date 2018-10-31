@@ -81,7 +81,6 @@ export default {
       const newLogEntry = {
         content: this.entry
       };
-      const created = new Date().toISOString();
       this.entry = "";
 
       this.$apollo.mutate({
@@ -111,7 +110,7 @@ export default {
           addLogEntry: {
             __typename: "LogEntry",
             id: -1,
-            created,
+            created: new Date().toISOString(),
             ...newLogEntry
           }
         }
