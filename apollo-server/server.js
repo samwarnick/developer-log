@@ -75,6 +75,4 @@ export default app => {
   app.use(history());
 
   app.use(serveStatic(path.resolve(__dirname, "../dist")));
-
-  // Important that this is last
 };
