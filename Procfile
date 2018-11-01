@@ -1,1 +1,1 @@
-web: yarn apollo:run
+web: yarn apollo:run --mode production
