@@ -1,8 +1,8 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
+import Login from "./views/Login.vue";
 import { isLoggedIn } from "./utils/auth";
-import store from "./store";
 
 Vue.use(Router);
 
@@ -16,6 +16,11 @@ export default new Router({
       component: Home
     },
     {
+      path: "/login",
+      name: "Login",
+      component: Login
+    },
+    {
       path: "/log",
       name: "log",
       // route level code-splitting
@@ -25,9 +30,8 @@ export default new Router({
         import(/* webpackChunkName: "log" */ "./views/LogEntries.vue"),
       beforeEnter(to, from, next) {
         if (!isLoggedIn()) {
-          next("/");
+          next("/login");
         } else {
-          store.dispatch("login");
           next();
         }
       }

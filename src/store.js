@@ -5,19 +5,22 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    isLoggedIn: false
+    isLoggedIn: false,
+    user: {}
   },
   mutations: {
-    login(state) {
+    login(state, user) {
       state.isLoggedIn = true;
+      state.user = user;
     },
     logout(state) {
       state.isLoggedIn = false;
+      state.user = {};
     }
   },
   actions: {
-    login({ commit }) {
-      commit("login");
+    async login({ commit }, user) {
+      commit("login", user);
     },
     logout({ commit }) {
       commit("logout");

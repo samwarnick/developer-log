@@ -55,14 +55,21 @@ export default app => {
   app.get(
     "/auth/github/return",
     passport.authenticate("github", {
-      failureRedirect: "http://localhost:8080/fail"
+      failureRedirect:
+        process.env.NODE_ENV === "production"
+          ? "/login?failed"
+          : "http://localhost:8080/"
     }),
     (req, res) => {
-      const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ ...req.user }, process.env.JWT_SECRET, {
         expiresIn: "1d"
       });
       res.cookie("apollo-token", token);
-      res.redirect("http://localhost:8080/log");
+      res.redirect(
+        process.env.NODE_ENV === "production"
+          ? "/login"
+          : "http://localhost:8080/login"
+      );
     }
   );
 };
