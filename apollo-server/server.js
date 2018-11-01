@@ -24,7 +24,10 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: "/auth/github/return"
+      callbackURL:
+        process.env.NODE_ENV === "production"
+          ? "https://developer-log.herokuapp.com/auth/github/return"
+          : "/auth/github/return"
     },
     async (accessToken, refreshToken, profile, done) => {
       const result = await db.query(
