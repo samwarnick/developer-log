@@ -1,10 +1,6 @@
 {
   "name": "developer-log",
   "version": "0.1.0",
-  "engines": {
-    "node": "10.8.0",
-    "yarn": "1.9.4"
-  },
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
