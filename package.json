@@ -1,15 +1,20 @@
 {
   "name": "developer-log",
   "version": "0.1.0",
+  "engines": {
+    "node": "10.8.0",
+    "yarn": "1.9.4"
+  },
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "apollo": "vue-cli-service apollo:watch --run \"vue-cli-service serve\"",
-    "apollo:run": "DEBUG=express:* NODE_ENV=production vue-cli-service apollo:run",
+    "apollo:run": "vue-cli-service apollo:run",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "heroku-postbuild": "vue-cli-service build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.7",

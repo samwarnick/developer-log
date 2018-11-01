@@ -1,5 +1,4 @@
 import path from "path";
-// import express from "express";
 import passport from "passport";
 import GitHubStrategy from "passport-github";
 import { db } from "./utils/db";
