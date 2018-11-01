@@ -1,1 +1,1 @@
-web: yarn apollo:run --mode production --port $PORT
+web: yarn apollo:run --mode production --host 0.0.0.0 --port $PORT
