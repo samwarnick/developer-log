@@ -9,9 +9,9 @@ This is a site for me to play around more with Vue, Tailwind CSS, GraphQL, and o
 - [x] Delete log entries
 - [x] Use markdown in log entries
 - [x] Group log entries by day
-- [ ] User authentication and whatnot
+- [x] User authentication and whatnot
 - [ ] Edit log entries
-- [ ] Deploy somewhere so I don't have to run it locally
+- [x] Deploy somewhere so I don't have to run it locally
 - [ ] Export log as a markdown file
 - [ ] Think of more ideas
 
