@@ -1,9 +1,11 @@
 import path from "path";
-import express from "express";
+// import express from "express";
 import passport from "passport";
 import GitHubStrategy from "passport-github";
 import { db } from "./utils/db";
 import jwt from "jsonwebtoken";
+import history from "connect-history-api-fallback";
+import serveStatic from "serve-static";
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -48,8 +50,6 @@ passport.use(
 export default app => {
   app.use(passport.initialize());
 
-  app.use("/", express.static(path.resolve(__dirname, "../dist")));
-
   app.get("/auth/github", passport.authenticate("github"));
 
   app.get(
@@ -58,7 +58,7 @@ export default app => {
       failureRedirect:
         process.env.NODE_ENV === "production"
           ? "/login?failed"
-          : "http://localhost:8080/"
+          : "http://localhost:8080/login?failed"
     }),
     (req, res) => {
       const token = jwt.sign({ ...req.user }, process.env.JWT_SECRET, {
@@ -72,4 +72,10 @@ export default app => {
       );
     }
   );
+
+  app.use(history());
+
+  app.use(serveStatic(path.resolve(__dirname, "../dist")));
+
+  // Important that this is last
 };
