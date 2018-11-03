@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --mode=production",
     "lint": "vue-cli-service lint",
     "apollo": "vue-cli-service apollo:watch --run \"vue-cli-service serve\"",
     "apollo:run": "vue-cli-service apollo:run",
