@@ -52,7 +52,7 @@ import * as logEntriesGql from "@/graphql/LogEntries.gql";
 import * as addLogEntryGql from "@/graphql/AddLogEntry.gql";
 import * as deleteLogEntryGql from "@/graphql/DeleteLogEntry.gql";
 import marked from "marked";
-import moment from "moment";
+import moment from "moment/src/moment";
 
 export default {
   name: "LogEntries",

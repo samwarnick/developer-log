@@ -1,11 +1,13 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
-import Login from "./views/Login.vue";
-import NotFound from "./views/NotFound.vue";
 import { isLoggedIn } from "./utils/auth";
 
 Vue.use(Router);
+
+function loadView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`);
+}
 
 export default new Router({
   mode: "history",
@@ -14,12 +16,12 @@ export default new Router({
     {
       path: "/",
       name: "home",
-      component: Home
+      component: loadView("Home")
     },
     {
       path: "/login",
       name: "Login",
-      component: Login
+      component: loadView("Login")
     },
     {
       path: "/log",
@@ -27,8 +29,7 @@ export default new Router({
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () =>
-        import(/* webpackChunkName: "log" */ "./views/LogEntries.vue"),
+      component: loadView("LogEntries"),
       beforeEnter(to, from, next) {
         if (!isLoggedIn()) {
           next("/login");
@@ -37,6 +38,6 @@ export default new Router({
         }
       }
     },
-    { path: "*", component: NotFound }
+    { path: "*", component: loadView("NotFound") }
   ]
 });
