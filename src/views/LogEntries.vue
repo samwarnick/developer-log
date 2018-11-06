@@ -17,16 +17,7 @@
         </button>
       </form>
     </div>
-    <template v-for="group in logEntries">
-      <ul class="list-reset mt-4 max-w-lg mx-auto" :key="group.day">
-        <li>
-          <h2>{{ dateIsToday(group.day) ? "Today" : group.day }}</h2>
-        </li>
-        <ul class="list-reset">
-          <LogEntry v-for="entry in group.logEntries" :key="entry.id" :entry="entry"/>
-        </ul>
-      </ul>
-    </template>
+    <LogEntryGroup v-for="group in logEntries" :key="group.day" :group="group"/>
   </div>
 </template>
 
@@ -34,9 +25,8 @@
 // @ is an alias to /src
 import * as logEntriesGql from "@/graphql/LogEntries.gql";
 import * as addLogEntryGql from "@/graphql/AddLogEntry.gql";
-import * as deleteLogEntryGql from "@/graphql/DeleteLogEntry.gql";
 import moment from "moment/src/moment";
-import LogEntry from "@/components/LogEntry";
+import LogEntryGroup from "@/components/LogEntryGroup";
 
 export default {
   name: "LogEntries",
@@ -95,37 +85,10 @@ export default {
           }
         }
       });
-    },
-    deleteLogEntry(id) {
-      this.$apollo.mutate({
-        mutation: deleteLogEntryGql,
-        variables: {
-          input: { id }
-        },
-        update: store => {
-          const data = store.readQuery({ query: logEntriesGql });
-
-          data.logEntries = data.logEntries.filter(group => {
-            group.logEntries = group.logEntries.filter(
-              entry => entry.id !== id
-            );
-            return group.logEntries.length;
-          });
-
-          store.writeQuery({ query: logEntriesGql, data });
-        },
-        optimisticResponse: {
-          __typename: "Mutation",
-          deleteLogEntry: {
-            __typename: "DeleteLogEntry",
-            id: id
-          }
-        }
-      });
     }
   },
   components: {
-    LogEntry
+    LogEntryGroup
   }
 };
 </script>

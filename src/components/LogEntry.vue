@@ -18,6 +18,8 @@
 
 <script>
 import marked from "marked";
+import * as logEntriesGql from "@/graphql/LogEntries.gql";
+import * as deleteLogEntryGql from "@/graphql/DeleteLogEntry.gql";
 
 export default {
   name: "LogEntry",
@@ -27,6 +29,33 @@ export default {
   methods: {
     convertToMarkdown(value) {
       return marked(value, { sanitize: true });
+    },
+    deleteLogEntry(id) {
+      this.$apollo.mutate({
+        mutation: deleteLogEntryGql,
+        variables: {
+          input: { id }
+        },
+        update: store => {
+          const data = store.readQuery({ query: logEntriesGql });
+
+          data.logEntries = data.logEntries.filter(group => {
+            group.logEntries = group.logEntries.filter(
+              entry => entry.id !== id
+            );
+            return group.logEntries.length;
+          });
+
+          store.writeQuery({ query: logEntriesGql, data });
+        },
+        optimisticResponse: {
+          __typename: "Mutation",
+          deleteLogEntry: {
+            __typename: "DeleteLogEntry",
+            id: id
+          }
+        }
+      });
     }
   }
 };
