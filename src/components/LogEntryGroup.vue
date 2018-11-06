@@ -1,5 +1,5 @@
 <template>
-  <ul class="list-reset mt-4 max-w-lg mx-auto" :key="group.day">
+  <ul class="list-reset" :key="group.day">
     <li>
       <h2>{{ dateIsToday(group.day) ? "Today" : group.day }}</h2>
     </li>
