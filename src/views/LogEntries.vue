@@ -23,23 +23,7 @@
           <h2>{{ dateIsToday(group.day) ? "Today" : group.day }}</h2>
         </li>
         <ul class="list-reset">
-          <li
-            class="group flex justify-between items-start my-2 py-1 rounded-lg even:bg-grey-lightest odd:bg-grey-lighter text-grey-darkest"
-            v-for="entry in group.logEntries"
-            :key="entry.id"
-          >
-            <div class="flex-grow flex justify-between">
-              <span class="px-4" v-html="convertToMarkdown(entry.content)"></span>
-              <span class="text-grey-dark flex-no-shrink">{{ entry.created | moment("calendar") }}</span>
-            </div>
-            <button>
-              <FontAwesomeIcon
-                icon="trash-alt"
-                class="text-grey-dark opacity-25 group-hover:opacity-100 hover:text-red-dark mx-2"
-                @click="deleteLogEntry(entry.id)"
-              ></FontAwesomeIcon>
-            </button>
-          </li>
+          <LogEntry v-for="entry in group.logEntries" :key="entry.id" :entry="entry"/>
         </ul>
       </ul>
     </template>
@@ -51,8 +35,8 @@
 import * as logEntriesGql from "@/graphql/LogEntries.gql";
 import * as addLogEntryGql from "@/graphql/AddLogEntry.gql";
 import * as deleteLogEntryGql from "@/graphql/DeleteLogEntry.gql";
-import marked from "marked";
 import moment from "moment/src/moment";
+import LogEntry from "@/components/LogEntry";
 
 export default {
   name: "LogEntries",
@@ -69,9 +53,6 @@ export default {
     }
   },
   methods: {
-    convertToMarkdown(value) {
-      return marked(value, { sanitize: true });
-    },
     dateIsToday(date) {
       date = new moment(date, "D MMM YYYY");
       return moment().diff(date, "days") === 0;
@@ -142,6 +123,9 @@ export default {
         }
       });
     }
+  },
+  components: {
+    LogEntry
   }
 };
 </script>
