@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import moment from "moment/src/moment";
+import dateMixin from "@/utils/dateMixin";
 import LogEntry from "@/components/LogEntry";
 
 export default {
@@ -18,15 +18,10 @@ export default {
   props: {
     group: Object
   },
-  methods: {
-    dateIsToday(date) {
-      date = new moment(date, "D MMM YYYY");
-      return moment().diff(date, "days") === 0;
-    }
-  },
   components: {
     LogEntry
-  }
+  },
+  mixins: [dateMixin]
 };
 </script>
 

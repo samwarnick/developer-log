@@ -20,6 +20,7 @@
 import moment from "moment/src/moment";
 import * as logEntriesGql from "@/graphql/LogEntries.gql";
 import * as addLogEntryGql from "@/graphql/AddLogEntry.gql";
+import dateMixin from "@/utils/dateMixin";
 
 export default {
   name: "AddLogEntry",
@@ -29,10 +30,6 @@ export default {
     };
   },
   methods: {
-    dateIsToday(date) {
-      date = new moment(date, "D MMM YYYY");
-      return moment().diff(date, "days") === 0;
-    },
     addLogEntry() {
       const newLogEntry = {
         content: this.entry
@@ -72,7 +69,8 @@ export default {
         }
       });
     }
-  }
+  },
+  mixins: [dateMixin]
 };
 </script>
 
