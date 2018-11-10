@@ -5,20 +5,19 @@
 </template>
 
 <script>
+import isLoggedInGql from "@/graphql/LoggedIn.gql";
 import { isAuthenticated, login } from "@/utils/auth";
 
 export default {
   name: "Login",
   async mounted() {
     if (isAuthenticated()) {
-      await login(this.$apollo.provider.defaultClient);
+      await login(this.$apollo);
       this.$router.push("/log");
     }
   },
-  computed: {
-    isLoggedIn() {
-      return this.$store.state.isLoggedIn;
-    }
+  apollo: {
+    isLoggedIn: isLoggedInGql
   }
 };
 </script>

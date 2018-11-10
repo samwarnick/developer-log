@@ -45,13 +45,38 @@ const defaultOptions = {
   // cache: myCache
 
   // Override the way the Authorization header is set
-  getAuth: tokenName => getCookieByName(tokenName)
+  getAuth: tokenName => getCookieByName(tokenName),
 
   // Additional ApolloClient options
   // apollo: { ... }
 
   // Client local data (see apollo-link-state)
-  // clientState: { resolvers: { ... }, defaults: { ... } }
+  // clientState: { resolvers: { ... }, defaults: { ... } },
+  clientState: {
+    defaults: {
+      isLoggedIn: false,
+      user: {
+        __typename: "User",
+        displayName: "",
+        profileImage: ""
+      }
+    },
+    resolvers: {
+      Mutation: {
+        loggedInSet: (root, { isLoggedIn, user }, { cache }) => {
+          const data = {
+            isLoggedIn,
+            user: {
+              __typename: "User",
+              ...user
+            }
+          };
+          cache.writeData({ data });
+          return null;
+        }
+      }
+    }
+  }
 };
 
 // Call this in the Vue app file

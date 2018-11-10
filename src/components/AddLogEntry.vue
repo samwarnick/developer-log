@@ -73,6 +73,3 @@ export default {
   mixins: [dateMixin]
 };
 </script>
-
-<style scoped>
-</style>

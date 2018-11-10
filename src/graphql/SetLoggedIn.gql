@@ -1,0 +1,3 @@
+mutation setIsLoggedIn($isLoggedIn: Boolean, $user: User) {
+  loggedInSet(isLoggedIn: $isLoggedIn, user: $user) @client
+}

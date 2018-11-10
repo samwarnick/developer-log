@@ -11,6 +11,7 @@
 
 <script>
 // @ is an alias to /src
+import { isLoggedIn } from "@/utils/auth";
 import * as logEntriesGql from "@/graphql/LogEntries.gql";
 import AddLogEntry from "@/components/AddLogEntry";
 import LogEntryGroup from "@/components/LogEntryGroup";

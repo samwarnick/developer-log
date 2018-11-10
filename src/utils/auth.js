@@ -1,7 +1,11 @@
 import router from "@/router";
-import store from "@/store";
 import jwt from "jsonwebtoken";
 import { onLogin, onLogout } from "@/vue-apollo.js";
+import loggedInGql from "@/graphql/LoggedIn.gql";
+import userGql from "@/graphql/User.gql";
+import setLoggedInGql from "@/graphql/SetLoggedIn.gql";
+
+let apollo;
 
 export const AUTH_TOKEN = "apollo-token";
 
@@ -24,24 +28,50 @@ export function isAuthenticated() {
   return !!getCookieByName(AUTH_TOKEN);
 }
 
-export function isLoggedIn() {
-  return isAuthenticated() && store.state.isLoggedIn && store.state.user;
+export async function isLoggedIn() {
+  if (apollo && isAuthenticated()) {
+    const {
+      data: { isLoggedIn }
+    } = await apollo.query({ query: loggedInGql });
+    const {
+      data: { user }
+    } = await apollo.query({ query: userGql });
+    console.log({ isLoggedIn, user });
+    return isLoggedIn && user;
+  }
 }
 
-export async function login(apolloClient) {
+export async function login($apollo) {
+  apollo = $apollo;
+  await onLogin($apollo.provider.defaultClient);
   const token = jwt.decode(getCookieByName(AUTH_TOKEN));
-  store.dispatch("login", {
-    displayName: token.display_name,
-    profileImage: token.profile_image
+  await $apollo.mutate({
+    mutation: setLoggedInGql,
+    variables: {
+      isLoggedIn: true,
+      user: {
+        displayName: token.display_name,
+        profileImage: token.profile_image
+      }
+    }
   });
-  await onLogin(apolloClient);
 }
 
-export async function logout(apolloClient) {
+export async function logout($apollo) {
+  apollo = $apollo;
   document.cookie =
     encodeURIComponent(AUTH_TOKEN) +
     "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-  await store.dispatch("logout");
+  await $apollo.mutate({
+    mutation: setLoggedInGql,
+    variables: {
+      isLoggedIn: false,
+      user: {
+        displayName: "",
+        profileImage: ""
+      }
+    }
+  });
   router.push("/");
-  await onLogout(apolloClient);
+  await onLogout($apollo.provider.defaultClient);
 }

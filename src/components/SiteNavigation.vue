@@ -23,20 +23,26 @@
 
 <script>
 import { logout } from "@/utils/auth";
+import isLoggedInGql from "@/graphql/LoggedIn.gql";
+import userGql from "@/graphql/User.gql";
 
 export default {
   name: "SiteNavigation",
-  computed: {
-    isLoggedIn() {
-      return this.$store.state.isLoggedIn;
-    },
-    user() {
-      return this.$store.state.user;
-    }
+  // computed: {
+  //   isLoggedIn() {
+  //     return this.$store.state.isLoggedIn;
+  //   },
+  //   user() {
+  //     return this.$store.state.user;
+  //   }
+  // },
+  apollo: {
+    isLoggedIn: isLoggedInGql,
+    user: userGql
   },
   methods: {
     logout() {
-      logout(this.$apollo.provider.defaultClient);
+      logout(this.$apollo);
     }
   }
 };

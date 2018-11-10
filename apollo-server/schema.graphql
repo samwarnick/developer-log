@@ -12,6 +12,11 @@ type LogEntry {
   created: String!
 }
 
+type User {
+  displayName: String
+  profileImage: String
+}
+
 input LogEntryInput {
   content: String!
 }
@@ -20,12 +25,11 @@ input DeleteLogEntryInput {
   id: ID!
 }
 
-
 type Query {
   logEntries: [LogEntryGroup]
 }
 
 type Mutation {
-  addLogEntry (input: LogEntryInput!): LogEntry!
-  deleteLogEntry (input: DeleteLogEntryInput!): Boolean!
+  addLogEntry(input: LogEntryInput!): LogEntry!
+  deleteLogEntry(input: DeleteLogEntryInput!): Boolean!
 }
