@@ -4,6 +4,7 @@ module.exports = {
     "^.+\\.vue$": "vue-jest",
     ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$":
       "jest-transform-stub",
+    "\\.(gql|graphql)$": "jest-transform-graphql",
     "^.+\\.jsx?$": "babel-jest"
   },
   moduleNameMapper: {
@@ -13,5 +14,7 @@ module.exports = {
   testMatch: [
     "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
   ],
-  testURL: "http://localhost/"
+  testURL: "http://localhost/",
+  collectCoverage: true,
+  collectCoverageFrom: ["src/**/*.{js,vue}", "!**/node_modules/**"]
 };

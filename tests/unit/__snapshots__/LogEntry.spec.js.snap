@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogEntry.vue renders correctly 1`] = `
+<li
+  class="group flex justify-between items-start my-2 py-1 rounded-lg even:bg-grey-lightest odd:bg-grey-lighter text-grey-darkest"
+>
+  <div
+    class="flex-grow flex justify-between"
+  >
+    <span
+      class="px-4"
+    >
+      <p>
+        This is a test
+      </p>
+      
+
+    </span>
+     
+    <span
+      class="text-grey-dark flex-no-shrink"
+    >
+      2018-11-10T21:39:43.115Z
+    </span>
+  </div>
+   
+  <button>
+    <fontawesomeicon
+      class="text-grey-dark opacity-25 group-hover:opacity-100 hover:text-red-dark mx-2"
+      icon="trash-alt"
+    />
+  </button>
+</li>
+`;
