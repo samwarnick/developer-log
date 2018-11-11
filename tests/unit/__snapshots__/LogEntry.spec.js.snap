@@ -8,7 +8,7 @@ exports[`LogEntry.vue renders correctly 1`] = `
     class="flex-grow flex justify-between"
   >
     <span
-      class="px-4"
+      class="px-4 font-semibold"
     >
       <p>
         This is a test

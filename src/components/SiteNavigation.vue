@@ -22,12 +22,17 @@
 </template>
 
 <script>
-import { logout } from "@/utils/auth";
+import { logout, isAuthenticated, isLoggedIn } from "@/utils/auth";
 import isLoggedInGql from "@/graphql/LoggedIn.gql";
 import userGql from "@/graphql/User.gql";
 
 export default {
   name: "SiteNavigation",
+  async mounted() {
+    if (isAuthenticated() && !(await isLoggedIn())) {
+      this.$router.push("/login");
+    }
+  },
   apollo: {
     isLoggedIn: isLoggedInGql,
     user: userGql

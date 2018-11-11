@@ -4,7 +4,10 @@
       <AddLogEntry :no-entries="logEntries.length === 0"/>
     </div>
     <div class="px-4 mt-4 max-w-lg mx-auto">
-      <div v-if="logEntries.length === 0" class="flex flex-col items-center mt-12">
+      <div
+        v-if="!$apollo.loading && logEntries.length === 0"
+        class="flex flex-col items-center mt-12"
+      >
         <EmptyList/>
         <h2 class="mt-8">Go ahead, do something and log it.</h2>
       </div>
