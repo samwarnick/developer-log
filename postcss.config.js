@@ -8,10 +8,9 @@ class TailwindExtractor {
   }
 }
 
-module.exports = {
-  plugins: [
-    tailwindcss("tailwind.js"),
-    autoprefixer(),
+let plugins = [tailwindcss("tailwind.js"), autoprefixer()];
+if (process.env.NODE_ENV === "production") {
+  plugins.push(
     purgecss({
       whitelist: ["p"],
       content: ["./public/**/*.html", "./src/**/*.vue"],
@@ -22,5 +21,9 @@ module.exports = {
         }
       ]
     })
-  ]
+  );
+}
+
+module.exports = {
+  plugins
 };

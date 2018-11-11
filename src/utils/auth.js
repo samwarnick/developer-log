@@ -36,7 +36,6 @@ export async function isLoggedIn() {
     const {
       data: { user }
     } = await apollo.query({ query: userGql });
-    console.log({ isLoggedIn, user });
     return isLoggedIn && user;
   }
 }

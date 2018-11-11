@@ -5,3 +5,28 @@
 textarea {
   resize: none;
 }
+
+.glow {
+  position: relative;
+}
+.glow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  animation: glow 2.5s ease-in-out infinite alternate;
+  box-shadow: 0 0 12px #4dc0b5;
+}
+
+@keyframes glow {
+  0%,
+  15% {
+    opacity: 0;
+  }
+  85%,
+  100% {
+    opacity: 1;
+  }
+}

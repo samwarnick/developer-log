@@ -10,6 +10,7 @@
     <button
       type="submit"
       class="border-2 border-blue bg-white hover:bg-blue text-blue hover:text-white rounded px-2 ml-2 flex items-center justify-center focus:outline-none shadow"
+      :class="{glow: noEntries}"
     >
       <FontAwesomeIcon icon="plus"/>
     </button>
@@ -24,6 +25,9 @@ import dateMixin from "@/utils/dateMixin";
 
 export default {
   name: "AddLogEntry",
+  props: {
+    noEntries: Boolean
+  },
   data() {
     return {
       entry: ""
@@ -45,8 +49,12 @@ export default {
           // Read the data from our cache for this query.
           const data = store.readQuery({ query: logEntriesGql });
           // Add our tag from the mutation to the end
-          if (!this.dateIsToday(data.logEntries[0].day)) {
+          if (
+            !data.logEntries.length ||
+            !this.dateIsToday(data.logEntries[0].day)
+          ) {
             data.logEntries.unshift({
+              __typename: "LogEntryGroup",
               day: new moment().format("D MMM YYYY"),
               logEntries: []
             });

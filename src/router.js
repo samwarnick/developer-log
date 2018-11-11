@@ -32,6 +32,7 @@ export default new Router({
       component: loadView("LogEntries"),
       async beforeEnter(to, from, next) {
         if (!(await isLoggedIn())) {
+          // TODO: Maybe check isAuthenticated and then set values here instead of going to login page
           next("/login");
         } else {
           next();
