@@ -20,12 +20,12 @@ exports[`LogEntry.vue renders correctly 1`] = `
     <span
       class="text-grey-dark flex-no-shrink"
     >
-      2018-11-10T21:39:43.115Z
+      Today!
     </span>
   </div>
    
   <button>
-    <fontawesomeicon
+    <fontawesomeicon-stub
       class="text-grey-dark opacity-25 group-hover:opacity-100 hover:text-red-dark mx-2"
       icon="trash-alt"
     />
