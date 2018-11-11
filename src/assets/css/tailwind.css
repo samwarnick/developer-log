@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300, 600");
+
 @tailwind preflight;
 @tailwind components;
 @tailwind utilities;
@@ -16,11 +18,11 @@ textarea {
   left: 0;
   height: 100%;
   width: 100%;
-  animation: glow 2.5s ease-in-out infinite alternate;
+  animation: breath 2.5s ease-in-out infinite alternate;
   box-shadow: 0 0 12px #4dc0b5;
 }
 
-@keyframes glow {
+@keyframes breath {
   0%,
   15% {
     opacity: 0;

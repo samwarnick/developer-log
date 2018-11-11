@@ -1,7 +1,7 @@
 <template>
   <nav class="bg-blue flex justify-between items-center text-white shadow-md">
     <router-link to="/" class="mx-4 my-2 text-white no-underline">
-      <h1>Developer Log</h1>
+      <h1 class="font-thin">Developer Log</h1>
     </router-link>
     <a
       v-if="!isLoggedIn"
@@ -28,14 +28,6 @@ import userGql from "@/graphql/User.gql";
 
 export default {
   name: "SiteNavigation",
-  // computed: {
-  //   isLoggedIn() {
-  //     return this.$store.state.isLoggedIn;
-  //   },
-  //   user() {
-  //     return this.$store.state.user;
-  //   }
-  // },
   apollo: {
     isLoggedIn: isLoggedInGql,
     user: userGql
