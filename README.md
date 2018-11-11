@@ -1,4 +1,5 @@
 # Developer Log
+[![CircleCI](https://circleci.com/gh/samwarnick/developer-log/tree/master.svg?style=svg)](https://circleci.com/gh/samwarnick/developer-log/tree/master)
 
 This is a site for me to play around more with Vue, Tailwind CSS, GraphQL, and other technologies I will find along the way.
 
