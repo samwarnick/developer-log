@@ -1,5 +1,6 @@
 import { db } from "./utils/db";
 import jwt from "jsonwebtoken";
+import { ForbiddenError } from "apollo-server";
 
 // Context passed to all resolvers (third argument)
 // req => Query
@@ -14,11 +15,15 @@ export default async ({ req, connection }) => {
 
   let user = {};
   if (token) {
-    const data = jwt.verify(token, process.env.JWT_SECRET);
-    const result = await db.query("SELECT * FROM users WHERE id = $1;", [
-      data.id
-    ]);
-    user = result.rows[0];
+    try {
+      const data = jwt.verify(token, process.env.JWT_SECRET);
+      const result = await db.query("SELECT * FROM users WHERE id = $1;", [
+        data.id
+      ]);
+      user = result.rows[0];
+    } catch (err) {
+      throw new ForbiddenError("You must be logged in.");
+    }
   }
 
   return {
