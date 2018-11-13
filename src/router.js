@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import { isAuthenticated, ensureUserDataSet } from "./utils/auth";
+import { isAuthenticated } from "./utils/auth";
 
 Vue.use(Router);
 
@@ -40,13 +40,6 @@ const router = new Router({
     },
     { path: "*", component: loadView("NotFound") }
   ]
-});
-
-router.beforeResolve((to, from, next) => {
-  if (isAuthenticated()) {
-    ensureUserDataSet();
-  }
-  next();
 });
 
 export default router;

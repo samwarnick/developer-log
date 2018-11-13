@@ -2,7 +2,6 @@ import router from "@/router";
 import jwt from "jsonwebtoken";
 import { onLogin, onLogout } from "@/vue-apollo.js";
 import setLoggedInGql from "@/graphql/SetLoggedIn.gql";
-import { client } from "@/vue-apollo";
 
 export const AUTH_TOKEN = "apollo-token";
 
@@ -25,9 +24,9 @@ export function isAuthenticated() {
   return !!getCookieByName(AUTH_TOKEN);
 }
 
-export async function ensureUserDataSet() {
+export async function ensureUserDataSet($apollo) {
   const token = jwt.decode(getCookieByName(AUTH_TOKEN));
-  await client.mutate({
+  await $apollo.mutate({
     mutation: setLoggedInGql,
     variables: {
       isLoggedIn: true,
@@ -39,16 +38,16 @@ export async function ensureUserDataSet() {
   });
 }
 
-export async function login() {
-  await onLogin(client);
-  await ensureUserDataSet();
+export async function login($apollo) {
+  await onLogin($apollo.provider.defaultClient);
+  await ensureUserDataSet($apollo);
 }
 
-export async function logout() {
+export async function logout($apollo) {
   document.cookie =
     encodeURIComponent(AUTH_TOKEN) +
     "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-  await client.mutate({
+  await $apollo.mutate({
     mutation: setLoggedInGql,
     variables: {
       isLoggedIn: false,
@@ -59,5 +58,5 @@ export async function logout() {
     }
   });
   router.push("/");
-  await onLogout(client);
+  await onLogout($apollo.provider.defaultClient);
 }

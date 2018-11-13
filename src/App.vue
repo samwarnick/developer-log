@@ -6,10 +6,16 @@
 </template>
 
 <script>
+import { isAuthenticated, ensureUserDataSet } from "./utils/auth";
 import SiteNavigation from "@/components/SiteNavigation.vue";
 
 export default {
   name: "App",
+  async created() {
+    if (isAuthenticated(this.$apollo)) {
+      await ensureUserDataSet(this.$apollo);
+    }
+  },
   components: {
     SiteNavigation
   }

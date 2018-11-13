@@ -12,7 +12,7 @@ export default {
   name: "Login",
   async mounted() {
     if (isAuthenticated()) {
-      await login();
+      await login(this.$apollo);
       const redirect = this.$route.query.redirect;
       if (redirect) {
         this.$router.push(`/${redirect}`);

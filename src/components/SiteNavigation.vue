@@ -5,13 +5,13 @@
         <FontAwesomeIcon icon="book-open" class="mr-4 text-2xl"></FontAwesomeIcon>Developer Log
       </h1>
     </router-link>
-    <router-link
+    <a
       v-if="!isLoggedIn"
       href="/auth/github"
       class="text-white border border-white rounded-full px-3 py-1 m-2 hover:text-blue hover:bg-white no-underline"
     >
       <FontAwesomeIcon :icon="['fab', 'github']" class="mr-2"></FontAwesomeIcon>Sign in with GitHub
-    </router-link>
+    </a>
     <div v-else class="flex items-center">
       <router-link
         to="/log"
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     logout() {
-      logout();
+      logout(this.$apollo);
     }
   }
 };
