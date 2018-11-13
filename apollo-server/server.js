@@ -69,8 +69,8 @@ export default app => {
       res.cookie("apollo-token", token);
       res.redirect(
         process.env.NODE_ENV === "production"
-          ? "/login"
-          : "http://localhost:8080/login"
+          ? "/login?redirect=log"
+          : "http://localhost:8080/login?redirect=log"
       );
     }
   );

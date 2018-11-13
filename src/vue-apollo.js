@@ -79,6 +79,8 @@ const defaultOptions = {
   }
 };
 
+export let client;
+
 // Call this in the Vue app file
 export function createProvider(options = {}) {
   // Create apollo client
@@ -106,6 +108,7 @@ export function createProvider(options = {}) {
     }
   });
 
+  client = apolloClient;
   return apolloProvider;
 }
 

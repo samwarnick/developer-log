@@ -9,7 +9,7 @@
         class="flex flex-col items-center mt-12"
       >
         <EmptyList/>
-        <h2 class="mt-8">Go ahead, do something and log it.</h2>
+        <h2 class="mt-8 font-thin">Go ahead, do something and log it.</h2>
       </div>
       <LogEntryGroup v-for="group in logEntries" :key="group.day" :group="group"/>
     </div>

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import { isLoggedIn } from "./utils/auth";
+import { isAuthenticated, ensureUserDataSet } from "./utils/auth";
 
 Vue.use(Router);
 
@@ -9,7 +9,7 @@ function loadView(view) {
     import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`);
 }
 
-export default new Router({
+const router = new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
@@ -31,8 +31,7 @@ export default new Router({
       // which is lazy-loaded when the route is visited.
       component: loadView("LogEntries"),
       async beforeEnter(to, from, next) {
-        if (!(await isLoggedIn())) {
-          // TODO: Maybe check isAuthenticated and then set values here instead of going to login page
+        if (!isAuthenticated()) {
           next("/login");
         } else {
           next();
@@ -42,3 +41,12 @@ export default new Router({
     { path: "*", component: loadView("NotFound") }
   ]
 });
+
+router.beforeResolve((to, from, next) => {
+  if (isAuthenticated()) {
+    ensureUserDataSet();
+  }
+  next();
+});
+
+export default router;

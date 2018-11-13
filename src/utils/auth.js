@@ -1,11 +1,8 @@
 import router from "@/router";
 import jwt from "jsonwebtoken";
 import { onLogin, onLogout } from "@/vue-apollo.js";
-import loggedInGql from "@/graphql/LoggedIn.gql";
-import userGql from "@/graphql/User.gql";
 import setLoggedInGql from "@/graphql/SetLoggedIn.gql";
-
-let apollo;
+import { client } from "@/vue-apollo";
 
 export const AUTH_TOKEN = "apollo-token";
 
@@ -28,23 +25,9 @@ export function isAuthenticated() {
   return !!getCookieByName(AUTH_TOKEN);
 }
 
-export async function isLoggedIn() {
-  if (apollo && isAuthenticated()) {
-    const {
-      data: { isLoggedIn }
-    } = await apollo.query({ query: loggedInGql });
-    const {
-      data: { user }
-    } = await apollo.query({ query: userGql });
-    return isLoggedIn && user;
-  }
-}
-
-export async function login($apollo) {
-  apollo = $apollo;
-  await onLogin($apollo.provider.defaultClient);
+export async function ensureUserDataSet() {
   const token = jwt.decode(getCookieByName(AUTH_TOKEN));
-  await $apollo.mutate({
+  await client.mutate({
     mutation: setLoggedInGql,
     variables: {
       isLoggedIn: true,
@@ -56,12 +39,16 @@ export async function login($apollo) {
   });
 }
 
-export async function logout($apollo) {
-  apollo = $apollo;
+export async function login() {
+  await onLogin(client);
+  await ensureUserDataSet();
+}
+
+export async function logout() {
   document.cookie =
     encodeURIComponent(AUTH_TOKEN) +
     "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-  await $apollo.mutate({
+  await client.mutate({
     mutation: setLoggedInGql,
     variables: {
       isLoggedIn: false,
@@ -72,5 +59,5 @@ export async function logout($apollo) {
     }
   });
   router.push("/");
-  await onLogout($apollo.provider.defaultClient);
+  await onLogout(client);
 }
