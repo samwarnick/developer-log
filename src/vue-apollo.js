@@ -5,7 +5,7 @@ import {
   createApolloClient,
   restartWebsockets
 } from "vue-cli-plugin-apollo/graphql-client";
-import { AUTH_TOKEN, getCookieByName } from "./utils/auth";
+import { AUTH_TOKEN, getCookieByName, clearAuthCookie } from "./utils/auth";
 import router from "./router";
 
 // Install the vue plugin
@@ -21,16 +21,16 @@ export const filesRoot =
 
 Vue.prototype.$filesRoot = filesRoot;
 
-const link = onError(({ graphQLErrors, networkError }) => {
+const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.map(({ message, locations, path }) =>
       console.log(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
       )
     );
+    clearAuthCookie();
     router.push("/login");
   }
-
   if (networkError) {
     console.log(`[Network error]: ${networkError}`);
   }
@@ -56,7 +56,7 @@ const defaultOptions = {
   // Override default apollo link
   // note: don't override httpLink here, specify httpLink options in the
   // httpLinkOptions property of defaultOptions.
-  link,
+  link: errorLink,
 
   // Override default cache
   // cache: myCache

@@ -43,10 +43,14 @@ export async function login($apollo) {
   await ensureUserDataSet($apollo);
 }
 
-export async function logout($apollo) {
+export function clearAuthCookie() {
   document.cookie =
     encodeURIComponent(AUTH_TOKEN) +
     "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+}
+
+export async function logout($apollo) {
+  clearAuthCookie();
   await $apollo.mutate({
     mutation: setLoggedInGql,
     variables: {
