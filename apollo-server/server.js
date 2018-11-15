@@ -51,9 +51,7 @@ passport.use(
 
 export default app => {
   app.use(passport.initialize());
-
   app.get("/auth/github", passport.authenticate("github"));
-
   app.get(
     "/auth/github/return",
     passport.authenticate("github", {
@@ -75,7 +73,10 @@ export default app => {
     }
   );
 
-  app.use(history());
-
+  app.use(
+    history({
+      rewrites: [{ from: /\/graphql/, to: "/graphql" }]
+    })
+  );
   app.use(serveStatic(path.resolve(__dirname, "../dist")));
 };
