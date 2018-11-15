@@ -1,5 +1,5 @@
 <template>
-  <ul class="list-reset" :key="group.day">
+  <ul class="list-reset mb-8" :key="group.day">
     <li>
       <h2 class="pl-4 font-thin">{{ dateIsToday(group.day) ? "Today" : group.day }}</h2>
     </li>

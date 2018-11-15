@@ -28,3 +28,4 @@ yarn-error.log*
 
 .env
 output.css
+dump.sql
